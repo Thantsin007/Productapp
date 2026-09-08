@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= product ? product.title : "Product not found" %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <h1 class="brand">🛍️ Product Catalog</h1>
+      <a class="back-link" href="/">&larr; Back to search</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <% if (error || !product) { %>
+      <div class="alert alert-error"><%= error || "Product not found." %></div>
+      <a href="/">Return to product list</a>
+    <% } else { %>
+      <div class="detail-wrap">
+        <div class="detail-gallery">
+          <img class="detail-main-img" src="<%= product.thumbnail %>" alt="<%= product.title %>" />
+          <div class="thumb-row">
+            <% (product.images || []).forEach(function(img) { %>
+              <img class="thumb" src="<%= img %>" alt="<%= product.title %> image" />
+            <% }); %>
+          </div>
+        </div>
+
+        <div class="detail-info">
+          <span class="card-id">#<%= product.id %></span>
+          <h2><%= product.title %></h2>
+          <p class="detail-brand-cat">
+            <% if (product.brand) { %><span><%= product.brand %></span><% } %>
+            <% if (product.category) { %><span class="dot">•</span><span><%= product.category %></span><% } %>
+          </p>
+
+          <div class="detail-price-row">
+            <span class="price-big">$<%= product.price %></span>
+            <% if (product.discountPercentage) { %>
+              <span class="discount">-<%= product.discountPercentage %>%</span>
+            <% } %>
+            <% if (product.rating) { %>
+              <span class="rating">⭐ <%= product.rating %></span>
+            <% } %>
+          </div>
+
+          <p class="detail-desc"><%= product.description %></p>
+
+          <ul class="detail-facts">
+            <% if (product.stock !== undefined) { %><li><strong>Stock:</strong> <%= product.stock %></li><% } %>
+            <% if (product.sku) { %><li><strong>SKU:</strong> <%= product.sku %></li><% } %>
+            <% if (product.weight) { %><li><strong>Weight:</strong> <%= product.weight %></li><% } %>
+            <% if (product.warrantyInformation) { %><li><strong>Warranty:</strong> <%= product.warrantyInformation %></li><% } %>
+            <% if (product.shippingInformation) { %><li><strong>Shipping:</strong> <%= product.shippingInformation %></li><% } %>
+            <% if (product.returnPolicy) { %><li><strong>Return policy:</strong> <%= product.returnPolicy %></li><% } %>
+            <% if (product.availabilityStatus) { %><li><strong>Availability:</strong> <%= product.availabilityStatus %></li><% } %>
+          </ul>
+
+          <% if (product.tags && product.tags.length) { %>
+            <div class="tags">
+              <% product.tags.forEach(function(t) { %><span class="tag"><%= t %></span><% }); %>
+            </div>
+          <% } %>
+
+          <% if (product.reviews && product.reviews.length) { %>
+            <div class="reviews">
+              <h3>Reviews</h3>
+              <% product.reviews.forEach(function(r) { %>
+                <div class="review">
+                  <div class="review-header">
+                    <strong><%= r.reviewerName %></strong>
+                    <span>⭐ <%= r.rating %></span>
+                  </div>
+                  <p><%= r.comment %></p>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+  </main>
+
+  <footer class="footer">
+    <p>Data from <a href="https://dummyjson.com/products" target="_blank" rel="noopener">dummyjson.com</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <h1 class="brand">🛍️ Product Catalog</h1>
+      <form class="search-form" action="/" method="GET">
+        <input
+          type="text"
+          name="q"
+          placeholder="Search by ID, name, or detail..."
+          value="<%= query %>"
+          autocomplete="off"
+        />
+        <button type="submit">Search</button>
+        <% if (query) { %>
+          <a class="clear-link" href="/">Clear</a>
+        <% } %>
+      </form>
+    </div>
+  </header>
+
+  <main class="container">
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <div class="results-meta">
+      <% if (query) { %>
+        <p>Showing <strong><%= resultCount %></strong> result(s) for "<strong><%= query %></strong>" (out of <%= total %> products)</p>
+      <% } else { %>
+        <p>Showing all <strong><%= total %></strong> products</p>
+      <% } %>
+    </div>
+
+    <% if (products.length === 0 && !error) { %>
+      <div class="empty-state">
+        <p>No products matched your search.</p>
+        <a href="/">View all products</a>
+      </div>
+    <% } %>
+
+    <div class="grid">
+      <% products.forEach(function(p) { %>
+        <a class="card" href="/product/<%= p.id %>">
+          <div class="card-img-wrap">
+            <img src="<%= p.thumbnail %>" alt="<%= p.title %>" loading="lazy" />
+          </div>
+          <div class="card-body">
+            <span class="card-id">#<%= p.id %></span>
+            <h3 class="card-title"><%= p.title %></h3>
+            <p class="card-desc"><%= p.description.slice(0, 80) %><%= p.description.length > 80 ? '…' : '' %></p>
+            <div class="card-footer">
+              <span class="price">$<%= p.price %></span>
+              <% if (p.brand) { %><span class="brand-tag"><%= p.brand %></span><% } %>
+            </div>
+          </div>
+        </a>
+      <% }); %>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Data from <a href="https://dummyjson.com/products" target="_blank" rel="noopener">dummyjson.com</a></p>
+  </footer>
+</body>
+</html>
